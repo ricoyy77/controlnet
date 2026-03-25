@@ -241,7 +241,7 @@ def main(args):
 
         del samples, images, canny, z
 
-    print("✅ All finished.")
+    print("✅ All finished1.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

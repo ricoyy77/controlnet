@@ -5,11 +5,11 @@ stage_1:
     encoder_config_path: 'facebook/dinov2-with-registers-base'
     encoder_input_size: 224
     encoder_params: {'dinov2_path': 'facebook/dinov2-with-registers-base', 'normalize': True}
-    decoder_config_path: 'configs/decoder/ViTXL'
-    pretrained_decoder_path: 'models/decoders/dinov2/wReg_base/ViTXL_n08/model.pt'
+    decoder_config_path: '/data2/user/myy/controlnet/RAE_CN/RAE/configs/decoder/ViTXL'
+    pretrained_decoder_path: '/data2/user/myy/controlnet/RAE_CN/RAE/models/decoders/dinov2/wReg_base/ViTXL_n08/model.pt'
     noise_tau: 0.
     reshape_to_2d: True
-    normalization_stat_path: 'models/stats/dinov2/wReg_base/imagenet1k/stat.pt'
+    normalization_stat_path: '/data2/user/myy/controlnet/RAE_CN/RAE/models/stats/dinov2/wReg_base/imagenet1k/stat.pt'
 stage_2:
   target: stage2.models.DDT.DiTwDDTHead
   params:
@@ -28,7 +28,7 @@ stage_2:
     use_rmsnorm: True
     wo_shift: False
     use_pos_embed: True
-  ckpt: 'models/DiTs/Dinov2/wReg_base/ImageNet256/DiTDH-XL/stage2_model.pt'
+  ckpt: '/data2/user/myy/controlnet/RAE_CN/RAE/models/DiTs/Dinov2/wReg_base/ImageNet256/DiTDH-XL/stage2_model.pt'
 
 transport:
   params:

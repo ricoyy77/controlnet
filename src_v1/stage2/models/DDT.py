@@ -147,6 +147,9 @@ class LightningDDTBlock(nn.Module):
                 c).chunk(6, dim=-1)
         x = x + DDTGate(self.attn(DDTModulate(self.norm1(x),
                         shift_msa, scale_msa), rope=feat_rope), gate_msa)
+        
+        
+
         x = x + DDTGate(self.mlp(DDTModulate(self.norm2(x),
                         shift_mlp, scale_mlp)), gate_mlp)
         return x
@@ -336,7 +339,7 @@ class DiTwDDTHead(nn.Module):
         imgs = x.reshape(shape=(x.shape[0], c, h * p, h * p))
         return imgs
 
-    def forward(self, x, t, y, s=None, mask=None):
+    def forward(self, x, t, y, s=None, mask=None, control_residuals=None):
         # x = self.x_embedder(x) + self.pos_embed
         t = self.t_embedder(t)
         y = self.y_embedder(y, self.training)
@@ -347,7 +350,15 @@ class DiTwDDTHead(nn.Module):
                 s = s + self.pos_embed
             # print(f"t shape: {t.shape}, y shape: {y.shape}, c shape: {c.shape}, s shape: {s.shape}, pos_embed shape: {self.pos_embed.shape}")
             for i in range(self.num_encoder_blocks):
+                # Retrieve residual for this block
                 s = self.blocks[i](s, c, feat_rope=self.enc_feat_rope)
+
+                # === [Inject Control Residual] ===
+                # 在 Block 输出后加上 ControlNet 的残差
+                if control_residuals is not None:
+                    s = s + control_residuals[i]
+                # =================================
+
             # broadcast t to s
             t = t.unsqueeze(1).repeat(1, s.shape[1], 1)
             s = nn.functional.silu(t + s)

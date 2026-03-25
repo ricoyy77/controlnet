@@ -17,4 +17,11 @@ upload_to_hf.py
 /data/
 /ckpts/
 data
-models
+models*.ckpt
+*.pt
+*.npy
+*.jpg
+*.png
+__pycache__/
+logs/
+output/
